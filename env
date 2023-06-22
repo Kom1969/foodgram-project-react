@@ -1,0 +1,3 @@
+SECRET_KEY = 'django-insecure-7+!44a4q%j*lxzk_2t^x5g#-us8th)*epw(*$00sc4n3vxdj24'
+ALLOWED_HOSTS = ['komhost.hopto.org', '158.160.64.255', 'localhost']
+DEBUG = True
