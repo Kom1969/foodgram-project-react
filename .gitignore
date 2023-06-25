@@ -131,3 +131,10 @@ dmypy.json
 
 # .idea
 .idea
+
+
+# папки со статикой и медиа
+media/
+
+# Others
+node_modules
