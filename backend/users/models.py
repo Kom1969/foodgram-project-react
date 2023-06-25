@@ -4,7 +4,6 @@ from rest_framework.exceptions import ValidationError
 
 
 class User(AbstractUser):
-    """Модель пользователя."""
     username = models.CharField(
         max_length=150,
         unique=True,
@@ -36,10 +35,6 @@ class User(AbstractUser):
 
 
 class Follow(models.Model):
-    """
-    Модель подписки на авторов.
-    Подписаться на себя нельзя.
-    """
     username = models.ForeignKey(User,
                                  related_name='followers',
                                  verbose_name='Подписчик',

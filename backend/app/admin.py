@@ -5,16 +5,13 @@ from .models import (Favorite, Ingredient, IngredientToRecipe, Recipe,
 
 
 class IngredientInline(admin.TabularInline):
-    """
-    Позволяет выводить кол-во ингредиентов в карточке рецепта.
-    """
+
     model = IngredientToRecipe
     extra = 2
     min_num = 1
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    """ Админка управление рецептами """
     list_display = ('name', 'author', 'cooking_time',
                     'in_favorite',)
     list_filter = ('name', 'author', 'tags')
@@ -27,7 +24,6 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class IngredientAdmin(admin.ModelAdmin):
-    """ Админка управление ингридиентами """
     list_display = ('id', 'name', 'measurement_unit')
     search_fields = ('name', )
     list_filter = ('name', )
@@ -35,14 +31,12 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class TagAdmin(admin.ModelAdmin):
-    """ Админка управление тегами """
     list_display = ('name', 'color', 'slug')
     search_fields = ('name',)
     empty_value_display = '-пусто-'
 
 
 class FavoriteAdmin(admin.ModelAdmin):
-    """ Админка управление подписками """
     list_display = ('user', 'recipe')
     list_filter = ('user', 'recipe')
     search_fields = ('user', 'recipe')
@@ -50,7 +44,6 @@ class FavoriteAdmin(admin.ModelAdmin):
 
 
 class ShopCartAdmin(admin.ModelAdmin):
-    """ Админка списка покупок """
     list_display = ('recipe', 'user')
     list_filter = ('recipe', 'user')
     search_fields = ('user', )

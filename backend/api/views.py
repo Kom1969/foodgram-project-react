@@ -1,5 +1,3 @@
-from app.models import (Favorite, Ingredient, IngredientToRecipe, Recipe,
-                        ShopCart, Tag)
 from django.db.models import Sum
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -10,6 +8,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
+from app.models import (Favorite, Ingredient, IngredientToRecipe, Recipe,
+                        ShopCart, Tag)
 from users.models import Follow, User
 
 from .filters import IngredientFilter, RecipeFilter
@@ -21,11 +21,6 @@ from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
 
 
 class UserViewSet(UserViewSet):
-    """
-    Вьюсет для работы с пользователями.
-    Обработка запросов на создание/получение пользователей.
-    Доступ для всех.
-    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = None
@@ -56,12 +51,6 @@ class UserViewSet(UserViewSet):
             Follow.objects.create(username=user, author=author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        if request.method == 'DELETE':
-            get_object_or_404(
-                Follow, username=user, author=author
-            ).delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
     @action(detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
         user = request.user
@@ -74,7 +63,6 @@ class UserViewSet(UserViewSet):
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
-    """Вьюсет для получения ингердиентов."""
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -92,7 +80,6 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    """ Вьюсет для рецептов."""
     queryset = Recipe.objects.all()
     serializer_class = CreateRecipeSerializer
     permission_classes = (AuthorAdminReadOnly,)
@@ -106,7 +93,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return CreateRecipeSerializer
 
     @staticmethod
-    def send_message(ingredients):
+    def list_ingredients(ingredients):
         shopping_list = 'Купить в магазине:'
         for ingredient in ingredients:
             shopping_list += (
@@ -124,8 +111,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             recipe__shopping_list__user=request.user
         ).order_by('ingredient__name').values(
             'ingredient__name', 'ingredient__measurement_unit'
-        ).annotate(amount=Sum('amount'))
-        return self.send_message(ingredients)
+        ).annotate(number=Sum('amount'))
+        return self.list_ingredients(ingredients)
 
     @action(
         detail=True,

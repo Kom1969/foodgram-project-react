@@ -4,7 +4,6 @@ from users.models import User
 
 
 class Tag(models.Model):
-    """Модель тегов рецептов."""
     name = models.CharField('Название', max_length=200, unique=True)
     color = models.CharField(
         'Цветовой HEX-код',
@@ -24,7 +23,6 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    """Модель ингридиентов."""
     name = models.CharField('Название', max_length=100, db_index=True)
     measurement_unit = models.CharField('Еденица измерения', max_length=30)
 
@@ -44,7 +42,6 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    """Модель рецепта."""
     name = models.CharField('Название', max_length=200)
     text = models.TextField('Описание')
     cooking_time = models.PositiveSmallIntegerField(
@@ -92,7 +89,6 @@ class Recipe(models.Model):
 
 
 class TagToRecipe(models.Model):
-    """Модель связывающая теги и рецепты."""
     tag = models.ForeignKey(
         Tag, on_delete=models.CASCADE, verbose_name='тег',
     )
@@ -103,13 +99,18 @@ class TagToRecipe(models.Model):
     class Meta:
         verbose_name = 'тег'
         verbose_name_plural = 'Теги'
+        constraints = [
+            models.UniqueConstraint(
+                fields=('name', 'author'),
+                name='unique_for_author',
+            ),
+        ]
 
     def __str__(self):
         return f'{self.tag} + {self.recipe}'
 
 
 class FavoriteShoppingCart(models.Model):
-    """ Модель связывающая список покупок и избранного. """
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -130,12 +131,17 @@ class FavoriteShoppingCart(models.Model):
 
 
 class Favorite(FavoriteShoppingCart):
-    """ Модель добавление в избраное. """
 
     class Meta:
         default_related_name = 'favorites'
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_user_recipe_favorite'
+            )
+        ]
 
         def __str__(self):
             return (f' рецепт {Favorite.recipe}'
@@ -143,12 +149,17 @@ class Favorite(FavoriteShoppingCart):
 
 
 class ShopCart(FavoriteShoppingCart):
-    """Модель списка покупок."""
 
     class Meta:
         default_related_name = 'shopping_list'
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзина'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_user_recipe_cart'
+            )
+        ]
 
     def __str__(self):
         return (f' рецепт {ShopCart.recipe}'
@@ -156,7 +167,6 @@ class ShopCart(FavoriteShoppingCart):
 
 
 class IngredientToRecipe(models.Model):
-    """Модель связывающая ингридиенты и рецепты."""
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, verbose_name='ингридиент',
     )
@@ -174,6 +184,12 @@ class IngredientToRecipe(models.Model):
     class Meta:
         verbose_name = 'ингридиент'
         verbose_name_plural = 'ингридиенты'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['ingredient', 'recipe'],
+                name='unique_ingredient_recipe'
+            )
+        ]
 
     def __str__(self):
         return f'{self.ingredient} + {self.recipe}'
