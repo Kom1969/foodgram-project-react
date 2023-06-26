@@ -9,11 +9,10 @@ from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
+from .filters import IngredientFilter, RecipeFilter
 from app.models import (Favorite, Ingredient, IngredientToRecipe, Recipe,
                         ShopCart, Tag)
 from users.models import Follow, User
-
-from .filters import IngredientFilter, RecipeFilter
 from .permissions import AuthorAdminReadOnly
 from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           IngredientSerializer, RecipeReadSerializer,
@@ -53,10 +52,8 @@ class UserViewSet(UserViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
-            get_object_or_404(
-                Follow, username=user, author=author
-            ).delete()
-            return Response
+            Follow.objects.filter(user=user, author=author).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
