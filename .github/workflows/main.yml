@@ -1,4 +1,4 @@
-name: Main Taski Workflow
+name: Main Fooodgram Workflow
 on:
   push:
     branches:
