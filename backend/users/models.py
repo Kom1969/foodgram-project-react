@@ -35,21 +35,27 @@ class User(AbstractUser):
 
 
 class Follow(models.Model):
-    username = models.ForeignKey(User,
-                                 related_name='followers',
-                                 verbose_name='Подписчик',
-                                 on_delete=models.CASCADE)
-    author = models.ForeignKey(User,
-                               related_name='followings',
-                               verbose_name='Автор',
-                               on_delete=models.CASCADE)
+    username = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Автор'
+    )
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name='Подписчик'
+    )
 
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
         constraints = [
-            models.UniqueConstraint(fields=['username', 'author'],
-                                    name='unique_follower')
+            models.UniqueConstraint(
+                fields=(
+                    "username",
+                    "author",
+                ),
+                name="unique_follow",)
         ]
 
     def clean(self):

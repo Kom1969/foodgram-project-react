@@ -100,12 +100,12 @@ class TagToRecipe(models.Model):
     class Meta:
         verbose_name = 'тег'
         verbose_name_plural = 'Теги'
-        constraints = [
-            models.UniqueConstraint(
-                fields=('name', 'author'),
-                name='unique_for_author',
-            ),
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=('tag', 'recipe'),
+        #         name='unique_tag_recipe',
+        #     ),
+        # ]
 
     def __str__(self):
         return f'{self.tag} + {self.recipe}'
@@ -137,12 +137,12 @@ class Favorite(FavoriteShoppingCart):
         default_related_name = 'favorites'
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'recipe'],
-                name='unique_user_recipe_favorite'
-            )
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=['user', 'recipe'],
+        #         name='unique_user_recipe_favorite'
+        #     )
+        # ]
 
         def __str__(self):
             return (f' рецепт {Favorite.recipe}'
@@ -155,12 +155,12 @@ class ShopCart(FavoriteShoppingCart):
         default_related_name = 'shopping_list'
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзина'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'recipe'],
-                name='unique_user_recipe_cart'
-            )
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=['user', 'recipe'],
+        #         name='unique_user_recipe_cart'
+        #     )
+        # ]
 
     def __str__(self):
         return (f' рецепт {ShopCart.recipe}'
@@ -185,12 +185,12 @@ class IngredientToRecipe(models.Model):
     class Meta:
         verbose_name = 'ингридиент'
         verbose_name_plural = 'ингридиенты'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['ingredient', 'recipe'],
-                name='unique_ingredient_recipe'
-            )
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=['ingredient', 'recipe'],
+        #         name='unique_ingredient_recipe'
+        #     )
+        # ]
 
     def __str__(self):
         return f'{self.ingredient} + {self.recipe}'
