@@ -252,6 +252,59 @@ GET http://127.0.0.1:8000/api/ingredients/
   }
 ]
 ```
+### Запуск локально 
+- Собираем контейнерыы:
+- Из папки infra/ разверните контейнеры при помощи docker-compose:
+```
+docker-compose up -d --build
+```
+- Выполните миграции:
+```
+docker-compose exec backend python manage.py migrate
+```
+- Создайте суперпользователя:
+```
+winpty docker-compose exec backend python manage.py createsuperuser
+```
+- Соберите статику:
+```
+docker-compose exec backend python manage.py collectstatic --no-input
+```
+- Наполните базу данных ингредиентами и тегами. Выполняйте команду из дериктории где находится файл manage.py:
+```
+docker-compose exec backend python manage.py load_ingredients
+```
+- Остановка проекта:
+```
+docker-compose down
+```
+### Запустить проект на боевом сервере:
+- Установить на сервере docker и docker-compose. Скопировать на сервер файлы docker-compose.yaml и default.conf:
+- Cоздать и заполнить .env файл в директории infra
+```
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+DB_HOST=db
+DB_PORT=5432
+TOKEN=252132607137
+ALLOWED_HOSTS=*
+```
+- После успешного запуска контрейнеров боевом сервере должны будут выполнены следующие команды:
+```
+sudo docker-compose exec web python manage.py migrate
+```
+```
+sudo docker-compose exec web python manage.py collectstatic --no-input 
+```
+Затем необходимо будет создать суперюзера и загрузить в базу данных информацию об ингредиентах:
+```
+sudo docker-compose exec web python manage.py createsuperuser
+```
+```
+sudo docker-compose exec web python manage.py load_ingredients
+```
 
 ### Автор
 - Михаил Корюкин
