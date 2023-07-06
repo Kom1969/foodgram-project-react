@@ -11,6 +11,13 @@
 - Логин: admin7
 - Пароль: kim2005
 
+### Проект доступен по ссылкам:
+```
+https://komfoodgram.ddns.net/
+
+https://komfoodgram.ddns.net/admin/
+```
+
 ### Запуск проекта
 - Клонировать репозиторий foodgram-project-react
 - Перейти в директорию infra
