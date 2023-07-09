@@ -13,9 +13,9 @@
 
 ### Проект доступен по ссылкам:
 ```
-https://komfoodgram.ddns.net/
+https://foodgram.servegame.com/
 
-https://komfoodgram.ddns.net/admin/
+https://foodgram.servegame.com/admin/
 ```
 
 ### Запуск проекта
