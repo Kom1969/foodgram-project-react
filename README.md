@@ -6,17 +6,9 @@
 - Python 3.10
 - Django - свободный фреймворк для веб-приложений на языке Python.
 - Django REST Framework - мощный и гибкий набор инструментов для создания веб-API.
-
-### Учетные данные администратора
-- Логин: admin7
-- Пароль: kim2005
-
-### Проект доступен по ссылкам:
-```
-https://foodgram.servegame.com/
-
-https://foodgram.servegame.com/admin/
-```
+- PostgreSQL
+- Gunicorn
+- Docker
 
 ### Запуск проекта
 - Клонировать репозиторий foodgram-project-react
@@ -311,6 +303,12 @@ sudo docker-compose exec web python manage.py createsuperuser
 ```
 ```
 sudo docker-compose exec web python manage.py load_ingredients
+```
+### Проект доступен по ссылке:
+```
+https://foodgram.servegame.com/
+Проект доступен по ссылке:
+
 ```
 
 ### Автор
